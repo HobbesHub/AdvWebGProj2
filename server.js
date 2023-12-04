@@ -17,7 +17,7 @@ const Book = mongoose.model('Book', {
   title: String,
   author: String,
   genre: String,
-  releaseYear: Number
+  releaseYear: Number,
 });
 
 // API to add a new book
