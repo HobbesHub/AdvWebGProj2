@@ -1,0 +1,32 @@
+[
+    {
+        "title": "Don't Make Me Think",
+        "author": "Steve Krug",
+        "genre": "UX Design",
+        "book_id": "1a2b3c4d-1234-5678-9abc-0123456789ab"
+    },
+    {
+        "title": "Seductive Interaction Design",
+        "author": "Stephen Anderson",
+        "genre": "UI Design",
+        "book_id": "a1b2c3d4-9876-5432-1abc-0123456789ab"
+    },
+    {
+        "title": "The Elements of User Experience",
+        "author": "Jesse James Garrett",
+        "genre": "UX Design",
+        "book_id": "d1e2f3g4-5678-4321-bcde-9876543210fe"
+    },
+    {
+        "title": "To Kill a Mockingbird",
+        "author": "Harper Lee",
+        "genre": "Literature",
+        "book_id": "e1f2g3h4-5678-4321-bcde-9876543210fe"
+    },
+    {
+        "title": "1984",
+        "author": "George Orwell",
+        "genre": "Literature",
+        "book_id": "f1g2h3i4-5678-4321-bcde-9876543210fe"
+    }
+]
