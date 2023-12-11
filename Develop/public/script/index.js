@@ -5,48 +5,24 @@ var titleEl = $('input[name="title"]');
 var genreEl = $('input[name="genre"]');
 var releaseYearEl = $('input[name="releaseYear"]');
 
-//const bookContainer = document.getElementById('bookList');
+// Function to update the book list in the HTML
+const updateBookList = (books) => {
+  const bookListElement = $('#bookList');
+  bookListElement.empty(); // Clear the existing content
 
-function handleFormSubmit(event) {
-  // Prevent the default behavior
-  event.preventDefault();
+  books.forEach((book) => {
+    // Create a new row for each book
+    const newRow = $('<tr>');
+    newRow.append($('<td>').text(book.title));
+    newRow.append($('<td>').text(book.author));
+    newRow.append($('<td>').text(book.genre));
+    newRow.append($('<td>').text(book.releaseYear));
 
-  console.log('author:', authorEl.val());
-  console.log('title:', titleEl.val());
-  console.log('genre:', genreEl.val());
-  console.log('releaseYear:', releaseYearEl.val());
+    // Append  new row to the book list
+    bookListElement.append(newRow);
+  });
+};
 
-  // Additional code related to handling books
-  const bookData = {
-    title: titleEl.val(),
-    author: authorEl.val(),
-    genre: genreEl.val(),
-    releaseYear: releaseYearEl.val(),
-  };
-
-  // Validate book data
-  const submission = validateBook(bookData);
-
-  if (submission.isValid) {
-    // If the submission is valid, send a POST request and add a new book
-    postBook(bookData)
-      .then((data) => {
-        alert('Book added successfully!');
-        // Fetch and display old books
-        fetchBooks();
-      })
-      .catch((error) => {
-        console.error('Error adding a new book:', error);
-      });
-  } else {
-    // If the submission is not valid, show errors
-    showErrors(submission.errors);
-  }
-}
-// Submit event on the form
-bookFormEl.on('submit', handleFormSubmit);
-
-// Additional code related to books
 const getBooks = () =>
   fetch('/api/books', {
     method: 'GET',
@@ -80,17 +56,22 @@ const fetchBooks = async () => {
   try {
     const books = await getBooks();
 
-    // Display each book in the console
+    // Display each book in the console for users
     books.forEach((book) => {
       console.log('Book:', book);
     });
+
+    // then Update the book list in the HTML
+    updateBookList(books);
   } catch (error) {
     console.error('Error fetching books:', error);
   }
 };
 
-getBooks().then((data) => data.forEach((book) => createCard(book)));
-
+// Fetch books and update the list when the page loads
+getBooks().then((data) => {
+  updateBookList(data);
+});
 
 // Function to validate the book data
 const validateBook = (newBook) => {
@@ -126,7 +107,6 @@ const showErrors = (errorObj) => {
 
 // Submit event on the form
 bookFormEl.on('submit', (event) => {
-  // Prevent the default behavior
   event.preventDefault();
 
   console.log('author:', authorEl.val());
@@ -149,19 +129,17 @@ bookFormEl.on('submit', (event) => {
     postBook(bookData, true)
       .then((data) => {
         alert('Book added successfully to MongoDB!');
-        // Fetch and display old books
+        // Fetch and display updated books
         fetchBooks();
       });
     postBook(bookData, false)
       .then((data) => {
         alert('Book added successfully to JSON file!');
-        // Fetch and display old books
+        // Fetch and display updated books
         fetchBooks();
       });
   } else {
-    // If the submission is not valid, show errors
+    // If invalid, show errors
     showErrors(submission.errors);
   }
 });
-
-
