@@ -2,18 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const addBookForm = document.getElementById('addBookForm');
   const bookList = document.getElementById('bookList');
 
-  // Function to create a card for a book
-  function createCard(book) {
-    const card = document.createElement('tr');
-    card.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      <td>${book.genre}</td>
-      <td>${book.releaseYear}</td>
-    `;
-    return card;
-  }
-
   // Function to fetch and display the list of all books
   const fetchBooks = async () => {
     try {
@@ -25,8 +13,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Display each book in the table
       books.forEach(book => {
-        const card = createCard(book);
-        bookList.appendChild(card);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.genre}</td>
+          <td>${book.releaseYear}</td>
+          <td><button class="btn btn-danger" onclick="deleteBook('${book.id}')">Delete</button></td>
+        `;
+        bookList.appendChild(row);
       });
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -57,14 +52,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const newBook = await response.json();
 
-      // Create a card for the new book and add it to the list
-      const card = createCard(newBook);
-      bookList.appendChild(card);
+      // Fetch and display the updated list of books
+      fetchBooks();
     } catch (error) {
       console.error('Error adding a new book:', error);
     }
   });
 
-  // Fetch and display the list of books when the page loads
+  // Function to delete a book
+  const deleteBook = async (bookId) => {
+    try {
+      // Send a DELETE request to remove the book
+      const response = await fetch(`/api/books/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Fetch and display the updated list of books
+      fetchBooks();
+    } catch (error) {
+      console.error('Error deleting the book:', error);
+    }
+  };
+
+  // fetch to display the list of books
   fetchBooks();
 });
