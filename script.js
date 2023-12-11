@@ -1,8 +1,18 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
   const addBookForm = document.getElementById('addBookForm');
   const bookList = document.getElementById('bookList');
+
+  // Function to create a card for a book
+  function createCard(book) {
+    const card = document.createElement('tr');
+    card.innerHTML = `
+      <td>${book.title}</td>
+      <td>${book.author}</td>
+      <td>${book.genre}</td>
+      <td>${book.releaseYear}</td>
+    `;
+    return card;
+  }
 
   // Function to fetch and display the list of all books
   const fetchBooks = async () => {
@@ -15,14 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Display each book in the table
       books.forEach(book => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${book.title}</td>
-          <td>${book.author}</td>
-          <td>${book.genre}</td>
-          <td>${book.releaseYear}</td>
-        `;
-        bookList.appendChild(row);
+        const card = createCard(book);
+        bookList.appendChild(card);
       });
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -53,13 +57,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const newBook = await response.json();
 
-      // Fetch and display the updated list of books
-      fetchBooks();
+      // Create a card for the new book and add it to the list
+      const card = createCard(newBook);
+      bookList.appendChild(card);
     } catch (error) {
       console.error('Error adding a new book:', error);
     }
   });
 
-  // fetch to display the list of books
+  // Fetch and display the list of books when the page loads
   fetchBooks();
 });
