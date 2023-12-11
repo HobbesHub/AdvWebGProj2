@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <td>${book.author}</td>
           <td>${book.genre}</td>
           <td>${book.releaseYear}</td>
-          <td><button class="btn btn-danger delete-button" data-book-id="${book.id}">Delete</button></td> <!-- Delete button -->
+          <td><button class="btn btn-danger" onclick="deleteBook('${book.id}')">Delete</button></td>
         `;
         bookList.appendChild(row);
       });
@@ -59,28 +59,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Event listener for book deletion
-  bookList.addEventListener('click', async function (event) {
-    if (event.target.classList.contains('delete-button')) {
-      const bookId = event.target.dataset.bookId; // Get the book ID from the button's data attribute
+  // Function to delete a book
+  const deleteBook = async (bookId) => {
+    try {
+      // Send a DELETE request to remove the book
+      const response = await fetch(`/api/books/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-      try {
-        // Send a DELETE request to delete the book
-        const response = await fetch(`/api/books/${bookId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          // Book deleted successfully, remove it from the UI
-          event.target.closest('tr').remove();
-        } else {
-          console.error('Error deleting the book:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error deleting the book:', error);
-      }
+      // Fetch and display the updated list of books
+      fetchBooks();
+    } catch (error) {
+      console.error('Error deleting the book:', error);
     }
-  });
+  };
 
   // fetch to display the list of books
   fetchBooks();
