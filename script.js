@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
   const addBookForm = document.getElementById('addBookForm');
   const bookList = document.getElementById('bookList');
@@ -21,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <td>${book.author}</td>
           <td>${book.genre}</td>
           <td>${book.releaseYear}</td>
+          <td><button class="btn btn-danger delete-button" data-book-id="${book.id}">Delete</button></td> <!-- Delete button -->
         `;
         bookList.appendChild(row);
       });
@@ -57,6 +56,29 @@ document.addEventListener('DOMContentLoaded', function () {
       fetchBooks();
     } catch (error) {
       console.error('Error adding a new book:', error);
+    }
+  });
+
+  // Event listener for book deletion
+  bookList.addEventListener('click', async function (event) {
+    if (event.target.classList.contains('delete-button')) {
+      const bookId = event.target.dataset.bookId; // Get the book ID from the button's data attribute
+
+      try {
+        // Send a DELETE request to delete the book
+        const response = await fetch(`/api/books/${bookId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          // Book deleted successfully, remove it from the UI
+          event.target.closest('tr').remove();
+        } else {
+          console.error('Error deleting the book:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error deleting the book:', error);
+      }
     }
   });
 
