@@ -24,7 +24,7 @@ const Book = mongoose.model('Book', {
 app.post('/books', async (req, res) => {
   try {
     const { title, author, genre, releaseYear } = req.body;
-    const newBook = new Book({ title, author, genre });
+    const newBook = new Book({ title, author, genre, releaseYear });
     await newBook.save();
     res.status(201).json(newBook);
   } catch (error) {
