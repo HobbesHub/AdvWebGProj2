@@ -42,6 +42,22 @@ app.get('/books', async (req, res) => {
   }
 });
 
+// API to delete a book by ID
+app.delete('/books/:id', async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    const deletedBook = await Book.findByIdAndRemove(bookId);
+
+    if (!deletedBook) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+
+    res.json(deletedBook);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/bookstore', { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
