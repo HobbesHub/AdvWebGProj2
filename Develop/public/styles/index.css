@@ -65,7 +65,7 @@ body {
   .table td {
     padding: 10px;
     border: 1px solid #1c3041; /* Dark blue borders */
-    color: #e4e4e4; /* Light text color for readability */
+    color: black; 
   }
   
   /* Responsive Layout */
