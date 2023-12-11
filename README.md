@@ -36,9 +36,6 @@ Contributions to enhance the Library App are welcome. Here's how you can contrib
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## Contact
-Your Name - [your-email@example.com](mailto:your-email@example.com)
-
 ## Acknowledgements
 - [Bootstrap](https://getbootstrap.com)
 - [Your additional resources or acknowledgements]
