@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Clear previous book list
       bookList.innerHTML = '';
 
-      // Display each book in the table
+      // Display each book in the table with a delete button
       books.forEach(book => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -19,12 +19,38 @@ document.addEventListener('DOMContentLoaded', function () {
           <td>${book.author}</td>
           <td>${book.genre}</td>
           <td>${book.releaseYear}</td>
-          <td><button class="btn btn-danger" onclick="deleteBook('${book.id}')">Delete</button></td>
+          <td><button class="btn btn-danger" data-id="${book._id}">Delete</button></td>
         `;
+
+        // Add a click event listener to the delete button
+        const deleteButton = row.querySelector('button');
+        deleteButton.addEventListener('click', () => {
+          const bookId = deleteButton.getAttribute('data-id');
+          deleteBook(bookId);
+        });
+
         bookList.appendChild(row);
       });
     } catch (error) {
       console.error('Error fetching books:', error);
+    }
+  };
+
+  // Function to delete a book by ID
+  const deleteBook = async (bookId) => {
+    try {
+      const response = await fetch(`/api/books/${bookId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.status === 200) {
+        // Book deleted successfully, re-fetch the updated list of books
+        fetchBooks();
+      } else {
+        console.error('Error deleting book:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting book:', error);
     }
   };
 
@@ -58,24 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error('Error adding a new book:', error);
     }
   });
-
-  // Function to delete a book
-  const deleteBook = async (bookId) => {
-    try {
-      // Send a DELETE request to remove the book
-      const response = await fetch(`/api/books/${bookId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      // Fetch and display the updated list of books
-      fetchBooks();
-    } catch (error) {
-      console.error('Error deleting the book:', error);
-    }
-  };
 
   // fetch to display the list of books
   fetchBooks();
